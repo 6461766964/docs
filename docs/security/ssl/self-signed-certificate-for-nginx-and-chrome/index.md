@@ -1,9 +1,9 @@
 
-# Self Signed SSL Certificate For Nginx And Chrome
+# Self Signed SSL Certificate + HTTP/2 for Nginx And Chrome
 
 ##### Requirements:
 
-* Ubuntu 16.04.5
+* Ubuntu 16.04.5 or elementaryOS 0.4.1
 * Nginx 1.14.0
 * Google Chrome 69.0.3497.100
 
@@ -12,7 +12,7 @@
 
 ### 0. Change the host file:
 
-Add your local domain to your hosts file:
+Add to your local domain to your hosts file:
 
 ```sh
 $ sudo nano /etc/hosts
@@ -91,7 +91,7 @@ server {
 
     server_name mywebapp.dev www.mywebapp.dev;
 
-    root /home/david/dev/js/mywebappdev;
+    root /var/www/html/mywebappdev;
     index index.html index.htm;
 
     ssl on;
@@ -113,7 +113,7 @@ It's a second server block. Save and Exit.
 Create a root folder for your web files:
 
 ```sh
-$ sudo mkdir /var/www/html/mywebapp
+$ sudo mkdir /var/www/html/mywebappdev
 ```
 
 
