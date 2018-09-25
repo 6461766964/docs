@@ -1,7 +1,7 @@
 
 # Self Signed SSL For Nginx And Chrome
 
-##### Requeriments:
+##### Requirements::
 
 * Ubuntu 16.04.5
 * Nginx 1.14.0
