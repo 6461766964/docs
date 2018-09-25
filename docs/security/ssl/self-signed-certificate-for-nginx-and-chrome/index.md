@@ -1,11 +1,14 @@
 
-# Self Signed SSL For Nginx And Chrome
+# Self Signed SSL Certificate For Nginx And Chrome
 
-##### Requirements::
+##### Requirements:
 
 * Ubuntu 16.04.5
 * Nginx 1.14.0
 * Google Chrome 69.0.3497.100
+
+### NOT SAFE FOR A PRODUCTION SERVER  
+
 
 ### 0. Change the host file:
 
@@ -19,8 +22,15 @@ Your hosts file looks like this:
 ```
 127.0.0.1       localhost
 127.0.1.1       case-G41MT-S2P
+```
+
+Add this line after:
+
+```
 127.0.0.1       mywebapp.dev www.mywebapp.dev
 ```
+
+Change mywebapp.dev to you local domain.
 
 
 ### 1. Install and configure Nginx
@@ -29,8 +39,9 @@ Your hosts file looks like this:
 ```sh
 $ cd
 $ wget https://nginx.org/keys/nginx_signing.key
+$ sudo apt-key add nginx_signing.key
 
-$ echo "# Nginx 2" | sudo tee -a /etc/apt/sources.list
+$ echo "# Nginx Web Server" | sudo tee -a /etc/apt/sources.list
 $ echo "deb http://nginx.org/packages/ubuntu/ xenial nginx" | sudo tee -a /etc/apt/sources.list
 $ echo "deb-src http://nginx.org/packages/ubuntu/ xenial nginx" | sudo tee -a /etc/apt/sources.list
 
@@ -47,7 +58,7 @@ $ sudo ln -s /etc/nginx/sites-available/mywebapp.dev /etc/nginx/sites-enabled/
 $ sudo nano /etc/nginx/sites-available/mywebapp.dev
 ```
 
-Let make some adjustment. Change the lines below:
+Let's make some adjustment. Change the lines below:
 
 ```
 server {
@@ -61,7 +72,7 @@ To
 server {
     listen 80;
     listen [::]:80;
-    server_name bitcommerce.dev www.bitcommerce.dev;
+    server_name mywebapp.dev www.mywebapp.dev;
 
     return 302 https://$server_name$request_uri;
 
@@ -147,7 +158,7 @@ You'll be asked to complete some info about your local domain
 
 Pay attension to answer the next question, put ***localhost*** for local server for exemple.
 
-**Common Name (e.g. server FQDN or YOUR name) []:** 
+**Common Name (e.g. server FQDN or YOUR name) []:**  
 **Email Address []:**
 
 
@@ -192,7 +203,7 @@ Now test the nginx configuration file:
 $ sudo nginx -t
 ```
 
-If everything is `OK`, restart nginx:
+If everything is OK, restart nginx:
 
 ```sh
 $ sudo service nginx restart
