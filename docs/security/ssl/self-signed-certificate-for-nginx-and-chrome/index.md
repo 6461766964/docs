@@ -1,4 +1,12 @@
 
+# Self Signed SSL For Nginx And Chrome
+
+##### Requeriments:
+
+* Ubuntu 16.04.5
+* Nginx 1.14.0
+* Google Chrome 69.0.3497.100
+
 ### 0. Change the host file:
 
 Add your local domain to your hosts file:
@@ -14,7 +22,9 @@ Your hosts file looks like this:
 127.0.0.1       mywebapp.dev www.mywebapp.dev
 ```
 
-###1. Install and configure Nginx
+
+### 1. Install and configure Nginx
+
 
 ```sh
 $ cd
@@ -27,6 +37,7 @@ $ echo "deb-src http://nginx.org/packages/ubuntu/ xenial nginx" | sudo tee -a /e
 $ sudo apt-get update && sudo apt-get install nginx -y
 ```
 
+
 ### 2. Configure Nginx web server
 
 ```sh
@@ -36,7 +47,7 @@ $ sudo ln -s /etc/nginx/sites-available/mywebapp.dev /etc/nginx/sites-enabled/
 $ sudo nano /etc/nginx/sites-available/mywebapp.dev
 ```
 
-Let make some adjustment. Change those lines below:
+Let make some adjustment. Change the lines below:
 
 ```
 server {
@@ -52,9 +63,9 @@ server {
     listen [::]:80;
     server_name bitcommerce.dev www.bitcommerce.dev;
 
-	return 302 https://$server_name$request_uri;
+    return 302 https://$server_name$request_uri;
 
-	root /var/www/html/mywebappdev;
+    root /var/www/html/mywebappdev;
 ```
 
 Now add the block below after your server block:
@@ -94,6 +105,7 @@ Create a root folder for your web files:
 $ sudo mkdir /var/www/html/mywebapp
 ```
 
+
 ### 3. Create a root CA cert
 
 First, let's create a folder for our root certificate.
@@ -125,17 +137,19 @@ $ openssl req -x509 -new -nodes -key rootCA.key -sha256 -days 1024 -out rootCA.p
 
 You'll be asked to complete some info about your local domain
 
-**Enter pass phrase for rootCA.key**
-**Country Name (2 letter code) [AU]:**
-**State or Province Name (full name) [Some-State]:**
-**Locality Name (eg, city) []:**
-**Organization Name (eg, company) [Internet Widgits Pty Ltd]:**
-**Organizational Unit Name (eg, section) []:**
+**Enter pass phrase for rootCA.key**  
+**Country Name (2 letter code) [AU]:**  
+**State or Province Name (full name) [Some-State]:**  
+**Locality Name (eg, city) []:**  
+**Organization Name (eg, company) [Internet Widgits Pty Ltd]:**  
+**Organizational Unit Name (eg, section) []:**  
+
 
 Pay attension to answer the next question, put ***localhost*** for local server for exemple.
 
 **Common Name (e.g. server FQDN or YOUR name) []:** 
 **Email Address []:**
+
 
 ### 4. Create private key for your local domain
 
@@ -149,7 +163,7 @@ $ sudo openssl req -new -sha256 -nodes -out server.csr -newkey rsa:2048 -keyout 
 $ sudo nano v3.ext
 ```
 
-Paste this peace inside of your v3.ext file:
+Paste this peace inside of your `v3.ext` file:
 
 ```authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
@@ -162,7 +176,7 @@ DNS.1 = www.mywebapp.dev
 
 Change the DNS to your local domain name.
 
-Save and close the v3.ext file.
+Save and close the `v3.ext` file.
 
 Now create the cert for your local domain with:
 
@@ -178,7 +192,7 @@ Now test the nginx configuration file:
 $ sudo nginx -t
 ```
 
-If everything is OK, restart nginx:
+If everything is `OK`, restart nginx:
 
 ```sh
 $ sudo service nginx restart
@@ -191,6 +205,5 @@ Click `IMPORT`, and select  `mycert/rootCA.pem` created earlier.
 
 When promoted, select  `Trust this certificate for identifying websites` and click `OK`.
 
-Reference:
+Reference:  
 https://code.luasoftware.com/tutorials/nginx/self-signed-ssl-for-nginx-and-chrome/
-
